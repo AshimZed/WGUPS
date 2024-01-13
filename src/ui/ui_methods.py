@@ -1,14 +1,19 @@
+import os
 import sys
 
 
 def display_title():
-    with open('src/ui/title.txt', 'r') as f:
+    script_dir = os.path.dirname(__file__)
+    title_path = os.path.join(script_dir, 'title.txt')
+    with open(title_path, 'r') as f:
         sys.stdout.write(f.read())
         sys.stdout.flush()
 
 
 def display_credit():
-    with open('src/ui/credit.txt', 'r') as f:
+    script_dir = os.path.dirname(__file__)
+    credit_path = os.path.join(script_dir, 'credit.txt')
+    with open(credit_path, 'r') as f:
         sys.stdout.write(f.read())
         sys.stdout.flush()
 

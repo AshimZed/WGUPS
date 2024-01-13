@@ -110,6 +110,7 @@ class CustomHashTable:
 
     # The table is resized to limit collisions when the load factor suggests the table is too small
     def upsize(self):
+
         old_buckets = self.buckets
         self.num_buckets = next_prime(self.num_buckets * 2)
         self.buckets = [LinkedList() for _ in range(self.num_buckets)]
