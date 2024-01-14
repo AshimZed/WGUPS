@@ -2,7 +2,7 @@
 import csv
 
 
-def read_csv(file_to_read: str):
+def read_csv(file_to_read):
     data = []
     with open(file_to_read, newline='') as csv_file:
         new_reader = csv.reader(csv_file)

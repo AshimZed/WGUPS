@@ -9,7 +9,7 @@
 # |       _____\//\\\__\//\\\______\//\\\\\\\\\\\\/___\///\\\\\\\\\/___\/\\\_____________\///\\\\\\\\\\\/___ |
 # |        ______\///____\///________\////////////_______\/////////_____\///________________\///////////_____|
 # '----------------------------------------------------------------------------------------------------------'
-# By Alexander D. Steele ------------------------------- Student ID: 011226486 -------------- DATE: 10/24/2023
+# By Alexander D. Steele ------------------------------- Student ID: 011226486 -------------- DATE: 1/14/2024
 import threading
 from datetime import datetime
 from pathlib import Path
@@ -17,6 +17,8 @@ from pathlib import Path
 from src.datatypes.address import Address
 from src.datatypes.truck import Truck
 from src.services.package_loader import package_loader
+from src.services.pkg_pool import update_pkg_pool
+from src.services.truck_loader import load_truck
 from src.ui.load_animation import loading_animation
 from src.ui.ui_methods import display_title, display_credit
 from src.utils.csv_parser import read_csv
@@ -62,7 +64,7 @@ if __name__ == '__main__':
     truck_2 = Truck(2)
     trucks = [truck_1, truck_2]
     minimum_speed = min([truck.speed_mph for truck in trucks])
-    minimum_capacity = min([truck.max_inv for truck in trucks])
+    maximum_capacity = min([truck.max_inv for truck in trucks])
 
     # Day Start
     day_start = datetime.strptime("8:00 am", '%I:%M %p')
@@ -74,6 +76,23 @@ if __name__ == '__main__':
     for key, package in packages:
         packages_set.add(package)
 
+    # Load package pool
+    depot = update_pkg_pool(packages_set, day_start)
+
+    # Load truck loads
+    for truck in trucks:
+        load_truck(depot, truck)
+
     # Stop the loading animation thread
     stop.set()
     load.join()
+    print("\n")
+
+    for truck in trucks:
+        print("Truck " + str(truck.truck_id) + ": ")
+        for pkg in truck.inv:
+            print(pkg)
+
+    print("At Depot: ")
+    for pkg in depot:
+        print(pkg)
