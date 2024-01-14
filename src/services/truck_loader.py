@@ -17,6 +17,11 @@ def load_trucks(pkg_pool, trucks):
 
         pkg = pkg_pool[0]
 
+        # Check if package is allowed on current truck
+        if (truck_idx + 1) in pkg.banned_trucks:
+            truck_idx = (truck_idx + 1) % len(trucks)
+            continue
+
         if pkg.linked_packages:
 
             if len(pkg.linked_packages) <= remaining_capacity:
