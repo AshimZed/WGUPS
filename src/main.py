@@ -18,7 +18,8 @@ from src.datatypes.address import Address
 from src.datatypes.truck import Truck
 from src.services.package_loader import package_loader
 from src.services.pkg_pool import update_pkg_pool
-from src.services.truck_loader import load_truck
+from src.services.truck_loader import load_trucks
+from src.services.update_links import update_links
 from src.ui.load_animation import loading_animation
 from src.ui.ui_methods import display_title, display_credit
 from src.utils.csv_parser import read_csv
@@ -75,13 +76,13 @@ if __name__ == '__main__':
     packages_set = set()
     for key, package in packages:
         packages_set.add(package)
+    update_links(packages_set)
 
     # Load package pool
     depot = update_pkg_pool(packages_set, day_start)
 
     # Load truck loads
-    for truck in trucks:
-        load_truck(depot, truck)
+    load_trucks(depot, trucks)
 
     # Stop the loading animation thread
     stop.set()

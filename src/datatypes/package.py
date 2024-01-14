@@ -21,12 +21,11 @@ class Package:
         # Fields to handle special circumstances
         self.banned_trucks = []
         self.status = Status.AT_DEPOT
-        self.linked_packages = []
+        self.linked_packages = set()
         self.delivery_time = None
         self.has_constraint = False
 
     # String definition
     def __str__(self):
-        return f"Package ID: {self.package_id}\tWeight: {self.weight}\tDeadline: {self.deadline}"
-
-
+        return (f"Package ID: {self.package_id}\tWeight: {self.weight}\tDeadline: {self.deadline}"
+                f"\tLinked Package: {bool(self.linked_packages)}")

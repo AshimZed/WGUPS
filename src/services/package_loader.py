@@ -21,7 +21,8 @@ def handle_comment(package, active_truck_ids):
     if "must be delivered with" in comment:
         # Grab the IDs from the comment and store them in the packages linked_packages
         linked_ids = [int(package_id.strip()) for package_id in comment.split("with")[1].split(",")]
-        package.linked_packages = linked_ids
+        for lpkg_id in linked_ids:
+            package.linked_packages.add(lpkg_id)
 
     # Handle wrong addresses
     if "wrong address" in comment:
