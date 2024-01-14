@@ -2,8 +2,10 @@
 def load_trucks(pkg_pool, trucks):
     truck_idx = 0
     full_trucks = set()
+    change_flag = True
 
-    while pkg_pool:
+    while pkg_pool and change_flag:
+        change_flag = False
         current_truck = trucks[truck_idx]
 
         if len(full_trucks) == len(trucks):
@@ -11,6 +13,7 @@ def load_trucks(pkg_pool, trucks):
 
         if current_truck in full_trucks:
             truck_idx = (truck_idx + 1) % len(trucks)
+            change_flag = True
             continue
 
         remaining_capacity = current_truck.max_inv - len(current_truck.inv)
@@ -20,6 +23,7 @@ def load_trucks(pkg_pool, trucks):
         # Check if package is allowed on current truck
         if (truck_idx + 1) in pkg.banned_trucks:
             truck_idx = (truck_idx + 1) % len(trucks)
+            change_flag = True
             continue
 
         if pkg.linked_packages:
@@ -32,12 +36,15 @@ def load_trucks(pkg_pool, trucks):
                             pkg_pool.remove(lpkg)
                 current_truck.inv.append(pkg)
                 pkg_pool.remove(pkg)
+                change_flag = True
             else:
                 truck_idx = (truck_idx + 1) % len(trucks)
+                change_flag = True
                 continue
         elif remaining_capacity > 0:
             current_truck.inv.append(pkg)
             pkg_pool.remove(pkg)
+            change_flag = True
         else:
             full_trucks.add(current_truck)
         truck_idx = (truck_idx + 1) % len(trucks)
