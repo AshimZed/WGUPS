@@ -16,6 +16,7 @@ from pathlib import Path
 
 from src.datatypes.address import Address
 from src.datatypes.truck import Truck
+from src.services.cwsa import calculate_savings, combine_routes
 from src.services.package_loader import package_loader
 from src.services.pkg_pool import update_pkg_pool
 from src.services.truck_loader import load_trucks
@@ -23,6 +24,7 @@ from src.services.update_links import update_links
 from src.ui.load_animation import loading_animation
 from src.ui.ui_methods import display_title, display_credit
 from src.utils.csv_parser import read_csv
+from src.utils.distance_functions import get_distance
 
 if __name__ == '__main__':
 
@@ -104,29 +106,15 @@ if __name__ == '__main__':
     for pkg in depot:
         print(pkg)
 
-    truck_1.inv.clear()
+    truck_1_savings = calculate_savings(truck_1.inv, distance_matrix, hub)
+    for pkgs, saving in truck_1_savings:
+        print(f"Packages: {pkgs[0].package_id} & {pkgs[1].package_id}\tSavings: {saving}")
 
-    print("After removal - Truck 1: ")
-    if truck_1.inv:
-        for pkg in truck_1.inv:
-            print(pkg)
-    else:
-        print("Truck empty")
-
-    time = datetime.strptime("11:00 am", '%I:%M %p')
-    depot = update_pkg_pool(packages_set, time, package_history)
-    print("depot updated")
-    print("At Depot: ")
-    for pkg in depot:
-        print(pkg)
-
-    load_trucks(depot, [truck_1])
-    print("Truck loaded")
-
-    print("Truck 1: ")
-    for pkg in truck_1.inv:
-        print(pkg)
-
-    print("At Depot: ")
-    for pkg in depot:
-        print(pkg)
+    truck_1_route = combine_routes(truck_1_savings, truck_1.inv)
+    print(f"{hub}\t--> {get_distance(distance_matrix, hub, truck_1_route[0][0])}")
+    for route in truck_1_route:
+        for idx, ad in enumerate(route):
+            if ad != route[-1]:
+                print(f"{ad}\t--> {get_distance(distance_matrix, ad, route[idx+1])}")
+            else:
+                print(f"{ad}\t--> {get_distance(distance_matrix, ad, hub)}")
