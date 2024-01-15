@@ -79,20 +79,53 @@ if __name__ == '__main__':
     update_links(packages_set)
 
     # Load package pool
-    depot = update_pkg_pool(packages_set, day_start)
+    package_history = set()
+    depot = update_pkg_pool(packages_set, day_start, package_history)
 
     # Load truck loads
     load_trucks(depot, trucks)
+    for truck in trucks:
+        for package in truck.inv:
+            package_history.add(package.package_id)
 
     # Stop the loading animation thread
     stop.set()
     load.join()
     print("\n")
 
+    print(f"Time: {str(datetime)}")
+
     for truck in trucks:
         print("Truck " + str(truck.truck_id) + ": ")
         for pkg in truck.inv:
             print(pkg)
+
+    print("At Depot: ")
+    for pkg in depot:
+        print(pkg)
+
+    truck_1.inv.clear()
+
+    print("After removal - Truck 1: ")
+    if truck_1.inv:
+        for pkg in truck_1.inv:
+            print(pkg)
+    else:
+        print("Truck empty")
+
+    time = datetime.strptime("11:00 am", '%I:%M %p')
+    depot = update_pkg_pool(packages_set, time, package_history)
+    print("depot updated")
+    print("At Depot: ")
+    for pkg in depot:
+        print(pkg)
+
+    load_trucks(depot, [truck_1])
+    print("Truck loaded")
+
+    print("Truck 1: ")
+    for pkg in truck_1.inv:
+        print(pkg)
 
     print("At Depot: ")
     for pkg in depot:
