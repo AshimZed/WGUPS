@@ -27,7 +27,7 @@ if __name__ == '__main__':
     load = threading.Thread(target=loading_animation, args=(stop,))
     load.start()
 
-    # Run bootstrap
+    # Run a bootstrap for the assignment data
     bootstrap()
 
     # Stop the loading animation thread
