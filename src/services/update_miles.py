@@ -1,7 +1,7 @@
 from src.utils.distance_functions import get_distance
 
 
-def update_miles(truck, hub, distance_matrix):
+def update_miles(truck, distance_matrix, hub):
     truck.current_mileage += get_distance(distance_matrix, hub, truck.route[0][0])
     for route in truck.route:
         for idx, ad in enumerate(route):

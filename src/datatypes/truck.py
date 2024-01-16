@@ -1,4 +1,5 @@
 from src.structures.hash_table import CustomHashTable
+from src.utils.distance_functions import get_distance
 
 
 class Truck:

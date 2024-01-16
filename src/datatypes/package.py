@@ -28,4 +28,4 @@ class Package:
     # String definition
     def __str__(self):
         return (f"Package ID: {self.package_id}\tWeight: {self.weight}\tDeadline: {self.deadline}"
-                f"\tLinked Package: {bool(self.linked_packages)}\tBanned Trucks: {self.banned_trucks}")
+                f"\tAvailable time: {self.available_time.strftime('%I:%M %p')}")

@@ -1,5 +1,5 @@
 
-def load_trucks(pkg_pool, trucks):
+def load_trucks(pkg_pool, package_history, trucks):
     truck_idx = 0
     full_trucks = set()
     change_flag = True
@@ -38,8 +38,10 @@ def load_trucks(pkg_pool, trucks):
                     for lpkg in pkg_pool:
                         if lpkg.package_id == lpkg_id:
                             current_truck.inv.append(lpkg)
+                            package_history.add(lpkg)
                             pkg_pool.remove(lpkg)
                 current_truck.inv.append(pkg)
+                package_history.add(pkg)
                 pkg_pool.remove(pkg)
                 change_flag = True
             else:
@@ -48,8 +50,11 @@ def load_trucks(pkg_pool, trucks):
                 continue
         elif remaining_capacity > 0:
             current_truck.inv.append(pkg)
+            package_history.add(pkg)
             pkg_pool.remove(pkg)
             change_flag = True
         else:
             full_trucks.add(current_truck)
         truck_idx = (truck_idx + 1) % len(trucks)
+
+    return pkg_pool, package_history, trucks

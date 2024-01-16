@@ -3,13 +3,15 @@ from pathlib import Path
 
 from src.datatypes.address import Address
 from src.datatypes.truck import Truck
-from src.services.cwsa import calculate_savings, combine_routes
+from src.services.optimize_route import optimize_route
 from src.services.package_loader import package_loader
 from src.services.pkg_pool import update_pkg_pool
+from src.services.print_route import print_route
+from src.services.time_from_miles import get_time_from_miles
 from src.services.truck_loader import load_trucks
 from src.services.update_links import update_links
+from src.services.update_miles import update_miles
 from src.utils.csv_parser import read_csv
-from src.utils.distance_functions import get_distance
 
 
 def bootstrap():
@@ -42,8 +44,6 @@ def bootstrap():
     truck_1 = Truck(1)
     truck_2 = Truck(2)
     trucks = [truck_1, truck_2]
-    minimum_speed = min([truck.speed_mph for truck in trucks])
-    maximum_capacity = min([truck.max_inv for truck in trucks])
 
     # Day Start
     day_start = datetime.strptime("8:00 am", '%I:%M %p')
@@ -58,10 +58,37 @@ def bootstrap():
 
     # Load package pool
     package_history = set()
-    depot = update_pkg_pool(packages_set, day_start, package_history)
+    depot, package_history = update_pkg_pool(packages_set, day_start, package_history)
 
-    # Load truck loads
-    load_trucks(depot, trucks)
+    loop_counter = 0
+    change_flag = True
+    while len(package_history) < len(packages_set):
+        print(f"Entering while loop iteration: {loop_counter}\n"
+              f"Packages Delivered: {len(package_history)}\tPackages Available: {len(depot)}"
+              f"\tTotal Packages: {len(packages_set)}")
+        min_miles_truck = trucks[0]
+        for truck in trucks:
+            if truck.current_mileage < min_miles_truck.current_mileage:
+                min_miles_truck = truck
+
+        if change_flag:
+            time = get_time_from_miles(min_miles_truck.current_mileage, day_start, min_miles_truck.speed_mph)
+            depot, package_history = update_pkg_pool(packages_set, time, package_history)
+        else:
+            time = get_time_from_miles((min_miles_truck.current_mileage + loop_counter),
+                                       day_start, min_miles_truck.speed_mph)
+            depot, package_history = update_pkg_pool(packages_set, time, package_history)
+
+        print(f"Loading truck: {min_miles_truck.truck_id}")
+        depot, package_history, [min_miles_truck] = load_trucks(depot, package_history, [min_miles_truck])
+        if not min_miles_truck.inv:
+            change_flag = False
+            loop_counter += 1
+            continue
+
+        optimize_route(min_miles_truck, distance_matrix, hub)
+        print_route(min_miles_truck, distance_matrix, hub)
+        update_miles(min_miles_truck, distance_matrix, hub)
+
     for truck in trucks:
-        for package in truck.inv:
-            package_history.add(package.package_id)
+        print(f"Truck: {truck.truck_id}\tMileage: {truck.current_mileage}")
