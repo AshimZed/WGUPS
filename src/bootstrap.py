@@ -87,7 +87,8 @@ def bootstrap():
                 depot, package_history = update_pkg_pool(log_file_path, packages_set, time, package_history)
 
             # print(f"Loading truck: {min_miles_truck.truck_id}")
-            depot, package_history, [min_miles_truck] = load_trucks(depot, package_history, [min_miles_truck])
+            depot, package_history, [min_miles_truck] = load_trucks(log_file_path, time, depot,
+                                                                    package_history, [min_miles_truck])
             if not min_miles_truck.inv:
                 change_flag = False
                 loop_counter += 1

@@ -1,5 +1,8 @@
+from src.datatypes.status import Status
+from src.utils.log_event import log_package_event
 
-def load_trucks(pkg_pool, package_history, trucks):
+
+def load_trucks(log_file, time, pkg_pool, package_history, trucks):
     truck_idx = 0
     full_trucks = set()
     change_flag = True
@@ -40,9 +43,11 @@ def load_trucks(pkg_pool, package_history, trucks):
                             current_truck.inv.append(lpkg)
                             package_history.add(lpkg)
                             pkg_pool.remove(lpkg)
+                            log_package_event(log_file, time, lpkg, Status.EN_ROUTE, current_truck)
                 current_truck.inv.append(pkg)
                 package_history.add(pkg)
                 pkg_pool.remove(pkg)
+                log_package_event(log_file, time, pkg, Status.EN_ROUTE, current_truck)
                 change_flag = True
             else:
                 truck_idx = (truck_idx + 1) % len(trucks)
@@ -52,6 +57,7 @@ def load_trucks(pkg_pool, package_history, trucks):
             current_truck.inv.append(pkg)
             package_history.add(pkg)
             pkg_pool.remove(pkg)
+            log_package_event(log_file, time, pkg, Status.EN_ROUTE, current_truck)
             change_flag = True
         else:
             full_trucks.add(current_truck)
