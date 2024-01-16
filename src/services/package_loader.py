@@ -66,7 +66,8 @@ def package_loader(address_list, packages_file, active_truck_ids, current_time, 
         comment = row[7] if row[7] else ''
         package = Package(package_id, address, city, state, zipcode, deadline, weight, comment, current_time)
         handle_comment(package, active_truck_ids)
-        log_package_event(log_file, (datetime.strptime(current_time, '%I:%M %p')), package, package.status)
+        if package.status == Status.REROUTING or package.status == Status.DELAYED_ON_FLIGHT:
+            log_package_event(log_file, (datetime.strptime(current_time, '%I:%M %p')), package, package.status)
         packages.insert(package_id, package)
 
     return packages

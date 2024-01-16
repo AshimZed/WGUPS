@@ -65,7 +65,7 @@ def bootstrap():
 
         # Load package pool
         package_history = set()
-        depot, package_history = update_pkg_pool(packages_set, day_start, package_history)
+        depot, package_history = update_pkg_pool(log_file_path, packages_set, day_start, package_history)
 
         loop_counter = 0
         change_flag = True
@@ -80,11 +80,11 @@ def bootstrap():
 
             if change_flag:
                 time = get_time_from_miles(min_miles_truck.current_mileage, day_start, min_miles_truck.speed_mph)
-                depot, package_history = update_pkg_pool(packages_set, time, package_history)
+                depot, package_history = update_pkg_pool(log_file_path, packages_set, time, package_history)
             else:
                 time = get_time_from_miles((min_miles_truck.current_mileage + loop_counter),
                                            day_start, min_miles_truck.speed_mph)
-                depot, package_history = update_pkg_pool(packages_set, time, package_history)
+                depot, package_history = update_pkg_pool(log_file_path, packages_set, time, package_history)
 
             # print(f"Loading truck: {min_miles_truck.truck_id}")
             depot, package_history, [min_miles_truck] = load_trucks(depot, package_history, [min_miles_truck])
