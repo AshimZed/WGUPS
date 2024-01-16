@@ -12,11 +12,17 @@ from src.services.truck_loader import load_trucks
 from src.services.update_links import update_links
 from src.services.update_miles import update_miles
 from src.utils.csv_parser import read_csv
+from src.utils.initialize_log_file import initialize_log_file
 
 
 def bootstrap():
     while True:
         base_path = Path.cwd()
+
+        # Create log file
+        log_file_path = base_path / 'data/package_log.csv'
+        headers = ['timestamp', 'package_id', 'status', 'truck_id']
+        initialize_log_file(log_file_path, headers)
 
         # Assign data file locations
         packages_file = base_path / "data/package_data.csv"
@@ -51,7 +57,7 @@ def bootstrap():
         hub = addresses[0]
 
         # Load packages at the start of the day
-        packages = package_loader(addresses, packages_file, trucks, "8:00 am")
+        packages = package_loader(addresses, packages_file, trucks, "8:00 am", log_file_path)
         packages_set = set()
         for key, package in packages:
             packages_set.add(package)

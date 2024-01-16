@@ -4,6 +4,7 @@ from src.datatypes.package import Package
 from src.datatypes.status import Status
 from src.structures.hash_table import CustomHashTable
 from src.utils.csv_parser import read_csv
+from src.utils.log_event import log_package_event
 
 
 def match_address(address_list, address_string):
@@ -44,7 +45,7 @@ def handle_comment(package, active_truck_ids):
         package.available_time = datetime_conversion
 
 
-def package_loader(address_list, packages_file, active_truck_ids, current_time):
+def package_loader(address_list, packages_file, active_truck_ids, current_time, log_file):
     # Instantiate database
     packages = CustomHashTable()
 
@@ -65,6 +66,7 @@ def package_loader(address_list, packages_file, active_truck_ids, current_time):
         comment = row[7] if row[7] else ''
         package = Package(package_id, address, city, state, zipcode, deadline, weight, comment, current_time)
         handle_comment(package, active_truck_ids)
+        log_package_event(log_file, (datetime.strptime(current_time, '%I:%M %p')), package, package.status)
         packages.insert(package_id, package)
 
     return packages

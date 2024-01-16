@@ -24,6 +24,7 @@ class Package:
         self.linked_packages = set()
         self.delivery_time = None
         self.has_constraint = False
+        self.history = {}
 
     # String definition
     def __str__(self):
