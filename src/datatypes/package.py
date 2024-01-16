@@ -28,5 +28,5 @@ class Package:
 
     # String definition
     def __str__(self):
-        return (f"Package ID: {self.package_id}\tWeight: {self.weight}\tDeadline: {self.deadline}"
-                f"\tAvailable time: {self.available_time.strftime('%I:%M %p')}")
+        return (f"Package ID: {self.package_id} | Weight: {self.weight} | Deadline: {self.deadline}"
+                f" | Addressed: {self.address}")

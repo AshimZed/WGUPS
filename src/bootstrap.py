@@ -101,9 +101,11 @@ def bootstrap():
         total_miles = 0
         for truck in trucks:
             total_miles += truck.current_mileage
-        print(f"Total Miles: {total_miles}")
+        # print(f"Total Miles: {total_miles}")
         if total_miles <= 140:
             break
 
-    for truck in trucks:
-        print(f"Truck: {truck.truck_id}\tMileage: {truck.current_mileage}")
+    # for truck in trucks:
+    #     print(f"Truck: {truck.truck_id}\tMileage: {truck.current_mileage}")
+
+    return trucks, packages_set
