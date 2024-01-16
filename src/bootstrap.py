@@ -96,11 +96,12 @@ def bootstrap():
 
             optimize_route(min_miles_truck, distance_matrix, hub)
             # print_route(min_miles_truck, distance_matrix, hub)
-            update_miles(min_miles_truck, distance_matrix, hub)
+            update_miles(log_file_path, day_start, min_miles_truck, distance_matrix, hub)
 
         total_miles = 0
         for truck in trucks:
             total_miles += truck.current_mileage
+        print(f"Total Miles: {total_miles}")
         if total_miles <= 140:
             break
 
