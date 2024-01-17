@@ -15,7 +15,9 @@ import threading
 from pathlib import Path
 
 from src.bootstrap import bootstrap
+from src.services.print_deliveries import print_deliveries
 from src.services.print_package import print_package
+from src.services.print_truck_location import print_truck_location
 from src.ui.load_animation import loading_animation
 from src.ui.ui_methods import display_title, display_credit, main_menu, check_truck, check_package, check_total_mileage, \
     check_location, check_deliveries
@@ -111,11 +113,12 @@ if __name__ == '__main__':
                             case "select truck":
                                 truck_id = input("Enter truck id: ").lower().strip()
                                 check_time = input("Enter time: ").lower().strip()
-                                print("PLACEHOLDER")
+                                print_truck_location(log_file, trucks, packages, check_time, truck_id)
 
                             case "all trucks":
                                 check_time = input("Enter time: ").lower().strip()
-                                print("PLACEHOLDER")
+                                for truck in trucks:
+                                    print_truck_location(log_file, trucks, packages, check_time, str(truck.truck_id))
 
             # Check Deliveries Menu
             case "check deliveries":
@@ -129,8 +132,9 @@ if __name__ == '__main__':
                     case "deliveries by truck":
                         truck_id = input("Enter truck id: ").lower().strip()
                         check_time = input("Enter time: ").lower().strip()
-                        print("PLACEHOLDER")
+                        print_deliveries(log_file, trucks, check_time, truck_id)
 
                     case "all deliveries":
                         check_time = input("Enter time: ").lower().strip()
-                        print("PLACEHOLDER")
+                        for truck in trucks:
+                            print_deliveries(log_file, trucks, check_time, str(truck.truck_id))
