@@ -60,7 +60,7 @@ def package_loader(address_list, packages_file, active_truck_ids, current_time, 
         zipcode = row[4]
         # Convert deadline string into a datetime object and set EOD deadlines to 5:00 pm
         deadline = (datetime.strptime(row[5], "%I:%M %p")
-                    if row[5] != "EOD" else None)
+                    if row[5] != "EOD" else datetime.strptime("5:00 PM", '%I:%M %p'))
         # Weight kept as a string because converting into a float is unnecessary and outside the scope of the assignment
         weight = row[6]
         comment = row[7] if row[7] else ''

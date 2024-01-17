@@ -28,5 +28,6 @@ class Package:
 
     # String definition
     def __str__(self):
-        return (f"Package ID: {self.package_id} | Weight: {self.weight} | Deadline: {self.deadline}"
-                f" | Addressed: {self.address}")
+        return (f"Package ID: {self.package_id} | Weight: {self.weight}"
+                f" | Deadline: {datetime.strftime(self.deadline, '%I:%M %p')}"
+                f" | Addressed: {self.address} | City and Zip: {self.city} {self.zipcode}")
