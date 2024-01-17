@@ -24,9 +24,7 @@ def print_package(log_file, packages, check_time, package_id):
     last_known_status = None
 
     for i in range(len(log_entries)):
-        # Check if the current entry's time is less than or equal to check_time
         if log_entries[i][0] <= check_time:
-            # If this is the last entry or the next entry's time is greater than check_time
             if i == len(log_entries) - 1 or log_entries[i + 1][0] > check_time:
                 last_known_status = log_entries[i][2]
                 truck = log_entries[i][3]

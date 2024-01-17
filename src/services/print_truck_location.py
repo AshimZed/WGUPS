@@ -26,9 +26,7 @@ def print_truck_location(log_file, trucks, packages, check_time, truck_id):
     next_known_status = None
 
     for i in range(len(log_entries)):
-        # Check if the current entry's time is less than or equal to check_time
         if log_entries[i][0] <= check_time:
-            # If this is the last entry or the next entry's time is greater than check_time
             if i == len(log_entries) - 1 or log_entries[i + 1][0] > check_time:
                 if i + 1 < len(log_entries):
                     next_known_status = log_entries[i + 1][2]

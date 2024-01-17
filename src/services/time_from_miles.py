@@ -7,11 +7,9 @@ def get_time_from_miles(miles, day_start, truck_speed):
 
     # print("Input variables are:", miles, day_start, truck_speed)
 
-    # use the miles_to_hours function to convert miles to time
     time_delta = miles_to_hours(miles, truck_speed)
     # print("Time traveled in hours:", time_delta)
 
-    # convert the time_delta into hours and minutes
     hours, remainder = divmod(time_delta, 1)
     # print("Hours part of time:", hours)
 
